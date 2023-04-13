@@ -100,6 +100,7 @@
 (setq org-plantuml-jar-path
       (expand-file-name
        "C:/PlantUML/plantuml-1.2023.2.jar"))
+;; Sly on the right
 (after! sly
     (set-popup-rules!
         '(("^\\*sly-mrepl"
@@ -113,3 +114,32 @@
             (lispy-mode 0)
             (electric-pair-mode 1))
           't)
+
+;; Zsh on vterm
+(setq vterm-shell "/bin/zsh")
+
+;; Elfeed rss
+(setq rmh-elfeed-org-files '("~/.config/doom/elfeed.org"))
+(setq browse-url-generic-program "firefox")
+(global-set-key (kbd "C-x w") 'elfeed)
+
+;; Beacon
+(use-package! beacon)
+(after! beacon (beacon-mode 1))
+
+;; Multi-cursor
+(defun my-evil-mc-make-cursor-and-pause ()
+  (interactive)
+  (when (derived-mode-p 'prog-mode 'text-mode)
+    (evil-mc-make-cursor-here)
+    (evil-mc-pause-cursors)))
+(defun my-evil-mc-resume-cursors ()
+  (interactive)
+  (when (derived-mode-p 'prog-mode 'text-mode)
+    (evil-mc-resume-cursors)))
+(define-key evil-normal-state-map (kbd "M-c") 'my-evil-mc-make-cursor-and-pause)
+
+;; C/C++ tab to jump
+(after! cc-mode
+  (map! :map (c++-mode-map)
+        "<tab>" #'evil-jump-item))
